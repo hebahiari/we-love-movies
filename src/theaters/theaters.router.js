@@ -1,9 +1,6 @@
-const router = require("express").Router();
+const router = require("express").Router({ mergeParams: true });
 const methodNotAllowed = require("../errors/methodNotAllowed");
 const controller = require("./theaters.controller")
-
-// router.route("/:movieId([0-9]+)")
-//     .get(controller.read)
 
 router
     .route("/")

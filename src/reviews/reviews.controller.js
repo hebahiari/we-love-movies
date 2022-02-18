@@ -1,5 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./reviews.service");
+const mapProperties = require("../utils/map-properties");
 
 async function reviewExists(req, res, next) {
     const reviewId = req.params.reviewId;
@@ -16,15 +17,34 @@ async function reviewExists(req, res, next) {
 
 async function list(req, res) {
     const movieId = req.params.movieId;
-    const reviews = await service.list(movieId);
+    const data = await service.list(movieId);
+
+    const reduceCritic = mapProperties({
+        critic_id: ["critic", "critic_id"],
+        preferred_name: ["critic", "preferred_name"],
+        surname: ["critic", "surname"],
+        organization_name: ["critic", "organization_name"],
+    });
+
+    const reviews = data.map(reduceCritic)
+
     res.status(200).json({ data: reviews })
 }
 
 async function update(req, res) {
-    const updatedReview = {...req.body.data, review_id: req.params.reviewId };
+    const reviewId = req.params.reviewId
+    const updatedReview = {...req.body.data, review_id: reviewId };
 
-    const review = await service.update(updatedReview);
-    res.status(201).json({ review });
+    await service.update(updatedReview);
+    const data = await service.read(reviewId);
+
+    const reduceCritic = mapProperties({
+        preferred_name: ["critic", "preferred_name"],
+        surname: ["critic", "surname"],
+        organization_name: ["critic", "organization_name"],
+    });
+
+    res.status(201).json({ data: reduceCritic(data[0]) });
 }
 
 async function destroy(req, res) {

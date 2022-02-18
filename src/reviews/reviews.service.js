@@ -1,15 +1,17 @@
 const knex = require("../db/connection");
 
 function read(reviewId) {
-    return knex("reviews")
+    return knex("reviews as r")
         .select("*")
-        .where({ "review_id": reviewId })
+        .where({ "r.review_id": reviewId })
+        .join("critics as c", "r.critic_id", "c.critic_id")
 }
 
 function list(movieId) {
-    return knex("reviews")
+    return knex("reviews as r")
         .select("*")
         .where({ movie_id: movieId })
+        .join("critics as c", "c.critic_id", "r.critic_id")
 }
 
 function destroy(reviewId) {
