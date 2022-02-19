@@ -1,12 +1,12 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const service = require("./theaters.service")
-const reduceProperties = require("../utils/reduce-properties")
+const service = require("./theaters.service");
+const reduceProperties = require("../utils/reduce-properties");
 
 async function list(req, res) {
     const movieId = req.params.movieId;
     if (movieId) {
-        const movieTheaters = await service.listMovieTheaters(movieId)
-        res.status(200).json({ data: movieTheaters })
+        const movieTheaters = await service.listMovieTheaters(movieId);
+        res.status(200).json({ data: movieTheaters });
     } else {
         const data = await service.listAllTheaters();
 
@@ -19,11 +19,11 @@ async function list(req, res) {
             image_url: ["movies", null, "image_url"],
         });
 
-        const allTheaters = reduceMovies(data)
-        res.status(200).json({ data: allTheaters })
+        const allTheaters = reduceMovies(data);
+        res.status(200).json({ data: allTheaters });
     }
 }
 
 module.exports = {
-    list: asyncErrorBoundary(list)
-}
+    list: asyncErrorBoundary(list),
+};

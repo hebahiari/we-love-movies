@@ -1,10 +1,9 @@
 const router = require("express").Router({ mergeParams: true });
 const methodNotAllowed = require("../errors/methodNotAllowed");
-const controller = require("./theaters.controller")
+const controller = require("./theaters.controller");
 
-router
-    .route("/")
+router.route("/")
     .get(controller.list)
-    .all(methodNotAllowed)
+    .all(methodNotAllowed);
 
 module.exports = router;

@@ -26,13 +26,13 @@ async function list(req, res) {
         organization_name: ["critic", "organization_name"],
     });
 
-    const reviews = data.map(reduceCritic)
+    const reviews = data.map(reduceCritic);
 
-    res.status(200).json({ data: reviews })
+    res.status(200).json({ data: reviews });
 }
 
 async function update(req, res) {
-    const reviewId = req.params.reviewId
+    const reviewId = req.params.reviewId;
     const updatedReview = {...req.body.data, review_id: reviewId };
 
     await service.update(updatedReview);
@@ -48,12 +48,12 @@ async function update(req, res) {
 }
 
 async function destroy(req, res) {
-    await service.delete(req.params.reviewId)
-    res.sendStatus(204)
+    await service.delete(req.params.reviewId);
+    res.sendStatus(204);
 }
 
 module.exports = {
     delete: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(destroy)],
     update: [asyncErrorBoundary(reviewExists), asyncErrorBoundary(update)],
-    list: asyncErrorBoundary(list)
+    list: asyncErrorBoundary(list),
 };
